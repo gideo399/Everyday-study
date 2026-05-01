@@ -1,0 +1,42 @@
+.drop{
+    display: flex;
+    width: 500px;
+    height: 500px;
+    background-color: #ccc;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000 ;
+    border-radius: 20px;
+    position: relative;
+    left : 450px;
+    top : 50px;
+}
+.drop .box{
+    width: 100px;
+    height: 100px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+    left : 200px;
+    top : 200px;
+}
+button{
+  
+   
+   position: relative;
+   left: 15px;
+    background-color: #2ea542;
+    color: #fff;
+   
+    border-radius: 5px;
+}
+button:hover{
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+}
+h1{
+    position: relative;
+    left: 15px;
+    color: #2ea542;
+text-shadow: 2px 2px 30px #1a1919;}

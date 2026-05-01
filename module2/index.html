@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="drop">
+        <h1>the form</h1>
+        <form action="#">
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name"> <br>
+
+        <label for="password">Password: </label>
+        <input type="text" name="password" id="password"><br>
+
+        <label for="date">Date: </label>
+        <input type="date" name="date" id="date"> <br>
+
+        <button onclick="display()"> Submit </button>
+
+    </form>
+    </div>
+    <script>
+        document.querySelector('body').addEventListener('click', SingleClick);
+        document.querySelector('form').addEventListener('mouseover', DoubleClick);
+            // Handle form submission
+
+        
+        
+        document.querySelector('button').addEventListener('click', display);
+
+        function display(){
+            alert("Hello World");
+        }
+
+        function SingleClick(){
+            document.querySelector('h1').innerHTML= "Deon";
+        }
+        function DoubleClick(){
+            document.querySelector('h1').innerHTML= "Double Clicked";
+        }
+    </script>
+    
+</body>
+</html>

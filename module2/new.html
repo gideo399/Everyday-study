@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Listener Project - Interactive Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .color-box {
+            width: 100px;
+            height: 100px;
+            background: #667eea;
+            margin: 10px 0;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .counter {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .key-press-display {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .log-area {
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            height: 100px;
+            overflow-y: auto;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .log-entry {
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
+        .clear-btn {
+            background: #dc3545;
+            margin-top: 10px;
+        }
+
+        .clear-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Event Listener Playground</h1>
+        <p class="subtitle">Explore JavaScript Events in Action!</p>
+
+        <!-- Click Event -->
+        <div class="demo-section">
+            <h3>1. Click Events</h3>
+            <button id="clickBtn">Click Me!</button>
+            <button id="doubleClickBtn">Double Click Me!</button>
+            <div id="clickMessage" style="margin-top: 10px; color: #666;"></div>
+        </div>
+
+        <!-- Mouse Events -->
+        <div class="demo-section">
+            <h3>2. Mouse Events</h3>
+            <div class="color-box" id="colorBox"></div>
+            <p id="mouseStatus">Move mouse over the box 👆</p>
+        </div>
+
+        <!-- Input Events -->
+        <div class="demo-section">
+            <h3>3. Input & Form Events</h3>
+            <input type="text" id="textInput" placeholder="Type something here...">
+            <div id="inputDisplay" style="color: #666; margin-top: 10px;"></div>
+        </div>
+
+        <!-- Keyboard Events -->
+        <div class="demo-section">
+            <h3>4. Keyboard Events</h3>
+            <p>Press any key on your keyboard 👇</p>
+            <div class="key-press-display" id="keyDisplay">
+                Press a key...
+            </div>
+        </div>
+
+        <!-- Counter Example -->
+        <div class="demo-section">
+            <h3>5. Counter with Events</h3>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="decrementBtn">-</button>
+                <div class="counter" id="counter">0</div>
+                <button id="incrementBtn">+</button>
+            </div>
+            <button id="resetBtn" class="clear-btn" style="width: 100%; margin-top: 10px;">Reset Counter</button>
+        </div>
+
+        <!-- Event Log -->
+        <div class="demo-section">
+            <h3>📝 Event Log</h3>
+            <div class="log-area" id="eventLog"></div>
+            <button id="clearLogBtn" class="clear-btn">Clear Log</button>
+        </div>
+    </div>
+
+    <script>
+        // Event logging function
+        function logEvent(eventName, details = '') {
+            const logArea = document.getElementById('eventLog');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.textContent = `[${timestamp}] ${eventName} ${details}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        // Clear log button
+        document.getElementById('clearLogBtn').addEventListener('click', () => {
+            document.getElementById('eventLog').innerHTML = '';
+            logEvent('📋', 'Log cleared');
+        });
+
+        // 1. Click Events
+        const clickBtn = document.getElementById('clickBtn');
+        const doubleClickBtn = document.getElementById('doubleClickBtn');
+        const clickMessage = document.getElementById('clickMessage');
+
+        clickBtn.addEventListener('click', () => {
+            clickMessage.textContent = '✓ Single click detected!';
+            logEvent('Click', 'Button clicked');
+            setTimeout(() => {
+                clickMessage.textContent = '';
+            }, 1500);
+        });
+
+        doubleClickBtn.addEventListener('dblclick', () => {
+            clickMessage.textContent = '✨ Double click detected!';
+            logEvent('Double Click', 'Button double-clicked');
+            setTimeout(() => {
+                clickMessage.textContent = '';
+            }, 1500);
+        });
+
+        // 2. Mouse Events
+        const colorBox = document.getElementById('colorBox');
+        const mouseStatus = document.getElementById('mouseStatus');
+
+        colorBox.addEventListener('mouseenter', () => {
+            colorBox.style.transform = 'scale(1.1)';
+            mouseStatus.textContent = '🎨 Mouse entered the box!';
+            mouseStatus.style.color = '#667eea';
+            logEvent('Mouse Enter', 'Mouse entered color box');
+        });
+
+        colorBox.addEventListener('mouseleave', () => {
+            colorBox.style.transform = 'scale(1)';
+            mouseStatus.textContent = '👋 Mouse left the box';
+            mouseStatus.style.color = '#666';
+            logEvent('Mouse Leave', 'Mouse left color box');
+        });
+
+        colorBox.addEventListener('mousemove', (e) => {
+            const x = e.offsetX;
+            const y = e.offsetY;
+            mouseStatus.textContent = `📍 Position: X=${x}, Y=${y}`;
+        });
+
+        colorBox.addEventListener('click', () => {
+            // Random color change on click
+            const colors = ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            colorBox.style.backgroundColor = randomColor;
+            logEvent('Color Change', `Changed to ${randomColor}`);
+        });
+
+        // 3. Input Events
+        const textInput = document.getElementById('textInput');
+        const inputDisplay = document.getElementById('inputDisplay');
+
+        textInput.addEventListener('input', (e) => {
+            const value = e.target.value;
+            inputDisplay.innerHTML = value ? `You typed: "${value}"` : 'Start typing...';
+            logEvent('Input', `"${value}"`);
+        });
+
+        textInput.addEventListener('focus', () => {
+            inputDisplay.style.color = '#667eea';
+            logEvent('Focus', 'Input field focused');
+        });
+
+        textInput.addEventListener('blur', () => {
+            inputDisplay.style.color = '#666';
+            logEvent('Blur', 'Input field blurred');
+        });
+
+        // 4. Keyboard Events
+        const keyDisplay = document.getElementById('keyDisplay');
+
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+            const code = e.code;
+            keyDisplay.innerHTML = `
+                Key: ${key}<br>
+                Code: ${code}<br>
+                Alt: ${e.altKey} | Ctrl: ${e.ctrlKey} | Shift: ${e.shiftKey}
+            `;
+            logEvent('Key Down', `Key: "${key}" (Code: ${code})`);
+            
+            // Prevent some keys from causing page issues
+            if (key === ' ' || key === 'Space') {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            logEvent('Key Up', `Released: ${e.key}`);
+        });
+
+        // 5. Counter Example
+        let counter = 0;
+        const counterDisplay = document.getElementById('counter');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const decrementBtn = document.getElementById('decrementBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        function updateCounter() {
+            counterDisplay.textContent = counter;
+            counterDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                counterDisplay.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        incrementBtn.addEventListener('click', () => {
+            counter++;
+            updateCounter();
+            logEvent('Counter', `Incremented to ${counter}`);
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            counter--;
+            updateCounter();
+            logEvent('Counter', `Decremented to ${counter}`);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            counter = 0;
+            updateCounter();
+            logEvent('Counter', `Reset to 0`);
+        });
+
+        // Additional Event: Context Menu (Right Click)
+        document.querySelector('.container').addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            logEvent('Context Menu', 'Right-click detected (prevented default)');
+            alert('Right-click is disabled in this demo!');
+        });
+
+        // Window load event
+        window.addEventListener('load', () => {
+            logEvent('Page Load', 'Demo ready! 🚀');
+        });
+
+        // Scroll event
+        window.addEventListener('scroll', () => {
+            // Throttle scroll events to avoid too many logs
+            if (!window.scrollTimeout) {
+                window.scrollTimeout = setTimeout(() => {
+                    logEvent('Scroll', `ScrollY: ${window.scrollY}`);
+                    window.scrollTimeout = null;
+                }, 500);
+            }
+        });
+
+        console.log('Event Listener Project Loaded!');
+    </script>
+</body>
+</html>
